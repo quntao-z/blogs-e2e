@@ -10,6 +10,13 @@ describe ('Blog app', () => {
     await expect(locator).toBeVisible()
   })
 
-  
+  test('login form', async ({ page}) => {
+    await page.getByTestId('username').fill('ghopper')
+    await page.getByTestId('password').fill('cobol')
+
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await expect(page.getByText('Grace Hopper logged in')).toBeVisible()
+  })
 }) 
 
