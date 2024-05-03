@@ -1,4 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
+const { loginWith } = require('./helper');
 
 describe ('Blog app', () => {
   beforeEach(async ({page, request}) => {
@@ -18,13 +19,38 @@ describe ('Blog app', () => {
     await expect(locator).toBeVisible()
   })
 
-  test('login form', async ({ page}) => {
-    await page.getByTestId('username').fill('ghopper')
-    await page.getByTestId('password').fill('cobol')
+  describe('Login', () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+      await loginWith(page, 'ghopper', 'cobol')
+  
+      await expect(page.getByText('Grace Hopper logged in')).toBeVisible()
+    })
 
-    await page.getByRole('button', { name: 'login' }).click()
+    test('fails login with the wrong credentials', async ({ page }) => {
+      await page.getByTestId('username').fill('hacker')
+      await page.getByTestId('password').fill('breakyourwebsite')
+  
+      await page.getByRole('button', { name: 'login' }).click()
 
-    await expect(page.getByText('Grace Hopper logged in')).toBeVisible()
+      const errorDiv = await page.locator('.error')
+  
+      await expect(errorDiv).toContainText('Wrong credentials')
+
+      await expect(page.getByText('Hacker logged in')).not.toBeVisible()
+    })
   })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, 'ghopper', 'cobol')
+    })
+  })
+
+  test('a new blog can be created', async ({ page }) => {
+    await page.getByRole('button', {name: 'Create New Blog'}).click()
+  })
+
+
+
 }) 
 
