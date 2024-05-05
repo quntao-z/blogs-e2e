@@ -13,7 +13,7 @@ const createBlog = async (page, title, author, url) => {
     await page.getByRole('button', {name: 'Create'}).click()
 }
 
-const createUser = async (name, username, password) => {
+const createUser = async (request, name, username, password) => {
     await request.post('http://localhost:3001/api/users', {
         data: {
           name: name,

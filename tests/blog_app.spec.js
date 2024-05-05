@@ -1,11 +1,12 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
 const { loginWith, createBlog, createUser } = require('./helper');
+const exp = require('constants');
 
 describe ('Blog app', () => {
   beforeEach(async ({page, request}) => {
     await request.post('http:localhost:3001/api/testing/reset')
-    createUser('Grace Hopper', 'ghopper', 'cobol')
-    createUser('Alan Turing', 'aturing', 'enigma')
+    createUser(request, 'Grace Hopper', 'ghopper', 'cobol')
+    createUser(request, 'Alan Turing', 'aturing', 'enigma')
     await page.goto('http://localhost:5173')
   })
 
@@ -38,21 +39,30 @@ describe ('Blog app', () => {
   describe('When logged in', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'ghopper', 'cobol')
+      createBlog(page, 'title-test', 'author-test', 'url-test')
     })
 
     test('a new blog can be created', async ({ page }) => {
-      createBlog(page, 'title-test', 'author-test', 'url-test')
-  
       const successDiv = await page.locator('.success')
       await expect(successDiv).toContainText('A new blog was added: title-test by author-test')
     })
 
     test(`a blog's likes can be edited`, async({page}) => {
-      createBlog(page, 'title-test', 'author-test', 'url-test')
-
       await page.getByRole('button', {name: 'View'}).click()
       await page.getByRole('button', {name: 'like'}).click()
       await expect(page.getByText('Likes: 1')).toBeVisible()
+    })
+
+    test('delete a blog', async ({page}) => {
+      await page.getByRole('button', {name: 'View'}).click()
+
+      page.on('dialog', async(dialog) => {
+        expect(dialog.message()).toContain("Removing the blog title-test by author-test")
+        await dialog.accept()
+      })
+
+      await page.getByRole('button', {name: 'remove'}).click()
+      await expect(page.getByRole('button', {name: 'View'})).not.toBeVisible()
     })
   })
 }) 
