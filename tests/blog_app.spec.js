@@ -64,6 +64,15 @@ describe ('Blog app', () => {
       await page.getByRole('button', {name: 'remove'}).click()
       await expect(page.getByRole('button', {name: 'View'})).not.toBeVisible()
     })
+
+    test(`user who created the blog see the blog's delete button`, async ({page}) => {
+      await page.getByRole('button', {name: 'View'}).click()
+      await expect(page.getByRole('button', {name: 'remove'})).toBeVisible()
+      await page.getByRole('button', {name: 'Log out'}).click()
+      await loginWith(page, 'aturing', 'enigma')
+      await page.getByRole('button', {name: 'View'}).click()
+      await expect(page.getByRole('button', {name: 'remove'})).not.toBeVisible()
+    })
   })
 }) 
 
