@@ -76,31 +76,19 @@ describe ('Blog app', () => {
 
     // order should be 3021
     test.only(`blog's ranking based on likes`, async({page}) => {
-      await createBlog(page, 'title-test1', 'author-test1', 'url-test1')
       await page.getByRole('button', {name: 'View'}).click()
       await page.getByRole('button', {name: 'like'}).click()
 
-      // await createBlog(page, 'title-test2', 'author-test2', 'url-test2')
-      // await page.getByRole('button', {name: 'View',  root: page.getByText('title-test2')}).click()
-      // await page.locator('div').filter({ hasText: /^title-test2$/ }).filter({ hasText: /^Likes$/ }).getByRole('button')
-      // console.log('yo')
-      // await page.getByText('url-test2').getByText('Likes:').getByRole('button', {name: 'like'}).click()
+      await createBlog(page, 'title-test1', 'author-test1', 'url-test1')
+      await page.getByRole('button', {name: 'View'}).nth(1).click()
+      await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.getByRole('button', {name: 'like'}).nth(1).click()
 
-
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test2')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test2')}).click()
-
-      // await page.getByRole('button', {name: 'View',  root: page.getByText('title-test')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test')}).click()
-
-      // createBlog(page, 'title-test3', 'author-test3', 'url-test3')
-      // await page.getByRole('button', {name: 'View',  root: page.getByText('title-test3')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test3')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test3')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test3')}).click()
-      // await page.getByRole('button', {name: 'like', root: page.getByText('title-test3')}).click()
+      await createBlog(page, 'title-test2', 'author-test2', 'url-test2')
+      await page.getByRole('button', {name: 'like'}).nth(2).click()
+      await page.getByRole('button', {name: 'like'}).nth(2).click()
     })
   })
 }) 
