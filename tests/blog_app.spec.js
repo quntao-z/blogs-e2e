@@ -80,14 +80,19 @@ describe ('Blog app', () => {
       await page.getByRole('button', {name: 'like'}).click()
 
       await createBlog(page, 'title-test1', 'author-test1', 'url-test1')
-      await page.getByRole('button', {name: 'View'}).nth(1).click()
+      await page.getByRole('button', {name: 'View'}).click()
       await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(1).click()
+      await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(1).click()
 
       await createBlog(page, 'title-test2', 'author-test2', 'url-test2')
+      await page.getByRole('button', {name: 'View'}).click()
       await page.getByRole('button', {name: 'like'}).nth(2).click()
+      await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(2).click()
     })
   })
