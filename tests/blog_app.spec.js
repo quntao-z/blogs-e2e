@@ -1,6 +1,7 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test');
 const { loginWith, createBlog, createUser } = require('./helper');
 const exp = require('constants');
+const { assert } = require('console');
 
 describe ('Blog app', () => {
   beforeEach(async ({page, request}) => {
@@ -74,26 +75,32 @@ describe ('Blog app', () => {
       await expect(page.getByRole('button', {name: 'remove'})).not.toBeVisible()
     })
 
-    // order should be 3021
+    // order should be 102
     test.only(`blog's ranking based on likes`, async({page}) => {
       await page.getByRole('button', {name: 'View'}).click()
-      await page.getByRole('button', {name: 'like'}).click()
+      await page.getByRole('button', {name: 'like'}).nth(0).click()
+
 
       await createBlog(page, 'title-test1', 'author-test1', 'url-test1')
       await page.getByRole('button', {name: 'View'}).click()
-      await page.getByRole('button', {name: 'like'}).nth(1).click()
       await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(1).click()
-      await page.waitForTimeout(100);
-      await page.getByRole('button', {name: 'like'}).nth(1).click()
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(200);
       await page.getByRole('button', {name: 'like'}).nth(1).click()
 
       await createBlog(page, 'title-test2', 'author-test2', 'url-test2')
       await page.getByRole('button', {name: 'View'}).click()
-      await page.getByRole('button', {name: 'like'}).nth(2).click()
       await page.waitForTimeout(100);
       await page.getByRole('button', {name: 'like'}).nth(2).click()
+
+      const test1Div = await page.locator('.blog-url').nth(0)
+      await expect(test1Div).toContainText("url-test1")
+
+      const testDiv = await page.locator('.blog-url').nth(1)
+      await expect(testDiv).toContainText("url-test")
+
+      const test2Div = await page.locator('.blog-url').nth(2)
+      await expect(test2Div).toContainText("url-test2")
     })
   })
 }) 
